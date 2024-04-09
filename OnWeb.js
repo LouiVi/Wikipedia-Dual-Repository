@@ -1,0 +1,1 @@
+a = document.title; b = document.body.innerText; db = app.OpenDatabase( "/storage/emulated/0/Download/sqlite/Wikipedia.sqlite" ); db.ExecuteSql( "INSERT INTO Wiki_Data(title, content)" +  " VALUES (?,?)", [a, b], null, null ); app.ShowPopup( "Title: "+a +", Content: "+ b);
