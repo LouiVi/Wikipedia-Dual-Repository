@@ -1,5 +1,5 @@
 
-var address1 = "https://en.wikipedia.org/wiki/Special:Random";
+var address1 = address2 = "https://en.wikipedia.org/wiki/Special:Random";
 var address2 = "https://es.wikipedia.org/wiki/Especial:Aleatoria";
 var c = 0;
 var words = [];
@@ -32,7 +32,7 @@ function OnStart()
 function SetData(){
 
 //Create or open a database called "Wikipedia".  
-    db = app.OpenDatabase( "/storage/emulated/0/Download/sqlite/WikipediaMulti.sqlite" )  
+    db = app.OpenDatabase( "/storage/emulated/0/Download/sqlite/WikipediaMulti3.sqlite" )  
       
      //db.ExecuteSql("DROP TABLE Wiki_Data;");
     //Create a table (if it does not exist already).  
@@ -58,7 +58,7 @@ function Progress2(progress)
 }
 function ParseData1(results)
 {
-	a = results[0];
+	a = results[0].replace(",","").replace("la enciclopedia libre","");
 	e = results[1];
 	b = results[2];
 	/*bb = b.split(" ");
@@ -86,7 +86,8 @@ function ParseData1(results)
 
 function ParseData2(results)
 {
-	a = results[0];
+	//a = results[0];
+	a = results[0].replace(",","").replace("la enciclopedia libre","");
 	e = results[1];
 	b = results[2];
 	/*bb = b.split(" ");
