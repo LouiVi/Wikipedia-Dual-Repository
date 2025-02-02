@@ -1,8 +1,8 @@
 cfg.Light, cfg.MUI, cfg.Portrait;
-var address1  = "https://fr.m.wikipedia.org/wiki/Sp%C3%A9cial:Page_au_hasard";//https://en.wikipedia.org/wiki/Special:Random";
-var address2 = "https://it.m.wikipedia.org/wiki/Speciale:PaginaCasuale";//https://es.wikipedia.org/wiki/Especial:Aleatoria";
+var address1  = "https://en.wikipedia.org/wiki/Special:Random";// "https://fr.m.wikipedia.org/wiki/Sp%C3%A9cial:Page_au_hasard";//https://en.wikipedia.org/wiki/Special:Random";
+var address2 = "https://en.wikipedia.org/wiki/Special:Random";//"https://it.m.wikipedia.org/wiki/Speciale:PaginaCasuale";//https://es.wikipedia.org/wiki/Especial:Aleatoria";
 var address3 = "https://en.wikipedia.org/wiki/Special:Random";
-var address4 = "https://es.wikipedia.org/wiki/Especial:Aleatoria";
+var address4 = "https://en.wikipedia.org/wiki/Special:Random";//"https://es.wikipedia.org/wiki/Especial:Aleatoria";
 var c = 0;
 var words = [];
 app.Include("Pako.js");
@@ -46,6 +46,7 @@ function OnStart()
 	*/
 	//Add layout to app.	
 	app.AddLayout( lay );
+	//app.GetPermission(  )
 	if(c==0) SetData();
 	//GetWiki();
 	r = setInterval(GetWiki, 875)
@@ -54,12 +55,12 @@ function OnStart()
 function SetData(){
 
 //Create or open a database called "Wikipedia".  
-    db = app.OpenDatabase( "/storage/emulated/0/db/WikiCompress.sqlite" )  
+    db = app.OpenDatabase( "/storage/emulated/0/Download/WikiComprexxx.sqlite" )  
       
      //db.ExecuteSql("DROP TABLE Wiki_Data;");
     //Create a table (if it does not exist already).  
     db.ExecuteSql( "CREATE TABLE IF NOT EXISTS Wiki_Data " +  
-        "(id integer primary key AUTOINCREMENT, title text, url text, textContent text, lang text)" )  
+        "(id integer primary key AUTOINCREMENT, title text unique, url text, textContent text, lang text)" )  
 db.ExecuteSql("CREATE VIEW IF NOT EXISTS WikiSortx AS SELECT * FROM Wiki_Data Order By title ASC");
 }
 
@@ -108,7 +109,7 @@ function ParseData1(results)
 	b = results[2];
 	d = results[3];
 	//app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
-	db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,'fre'], null, null );
+	db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,'eng'], null, null );
 	app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d) );
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
 
@@ -137,7 +138,7 @@ function ParseData2(results)
 	//app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
 //	db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [a, e, b, d, 'ita'], null, null );
 //db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [compressString(a), e, compressString(b), compressString(d),'ita'], null, null );
-db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b, 'ita'], null, null );
+db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b, 'eng'], null, null );
 	
 		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d) );
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
@@ -182,7 +183,7 @@ function ParseData4(results)
 	//app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
 	//db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [a, e, b, d,'spa'], null, null );
 //db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [compressString(a), e, compressString(b), compressString(d),'spa'], null, null );
-db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,'spa'], null, null );
+db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,'eng'], null, null );
 	
 		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d));
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
