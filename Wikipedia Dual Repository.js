@@ -1,10 +1,15 @@
 cfg.Light, cfg.MUI, cfg.Portrait;
-var address1  = "https://en.wikipedia.org/wiki/Special:Random";// "https://fr.m.wikipedia.org/wiki/Sp%C3%A9cial:Page_au_hasard";//https://en.wikipedia.org/wiki/Special:Random";
-var address2 = "https://en.wikipedia.org/wiki/Special:Random";//"https://it.m.wikipedia.org/wiki/Speciale:PaginaCasuale";//https://es.wikipedia.org/wiki/Especial:Aleatoria";
-var address3 = "https://en.wikipedia.org/wiki/Special:Random";
-var address4 = "https://en.wikipedia.org/wiki/Special:Random";//"https://es.wikipedia.org/wiki/Especial:Aleatoria";
+app.LoadPlugin( "Utils" );
+const utils = app.CreateUtils();
+var lng = 'eng';//ita';//fre';
+var addr = "https://en.wikipedia.org/wiki/Special:Random";//https://it.m.wikipedia.org/wiki/Speciale:PaginaCasuale";//https://fr.m.wikipedia.org/wiki/Sp%C3%A9cial:Page_au_hasard";
+var address1  = addr;//"https://en.wikipedia.org/wiki/Special:Random";// "https://fr.m.wikipedia.org/wiki/Sp%C3%A9cial:Page_au_hasard";//https://en.wikipedia.org/wiki/Special:Random";
+var address2 = addr;//"https://en.wikipedia.org/wiki/Special:Random";//"https://it.m.wikipedia.org/wiki/Speciale:PaginaCasuale";//https://es.wikipedia.org/wiki/Especial:Aleatoria";
+var address3 = addr;//"https://en.wikipedia.org/wiki/Special:Random";
+var address4 = addr;//"https://en.wikipedia.org/wiki/Special:Random";//"https://es.wikipedia.org/wiki/Especial:Aleatoria";
 var c = 0;
 var words = [];
+/*
 app.Include("Pako.js");
 function compressString(input) {
     const binaryString = new TextEncoder().encode(input);
@@ -17,6 +22,7 @@ function uncompressString(compressed) {
     const decompressed = pako.inflate(binaryString);
     return new TextDecoder().decode(decompressed);
 }
+*/
 //Called when application is started.
 function OnStart()
 {
@@ -55,13 +61,15 @@ function OnStart()
 function SetData(){
 
 //Create or open a database called "Wikipedia".  
-    db = app.OpenDatabase( "/storage/emulated/0/Download/WikiComprexxx.sqlite" )  
-      
+  //  db = app.OpenDatabase(  "/storage/emulated/0/Download/WikiComprexxx.sqlite" )  
+    db = app.OpenDatabase( app.GetDatabaseFolder()+ "/WikiData.sqlite" )  
+      app.CopyFile( app.GetDatabaseFolder()+ "/WikiData.sqlite", "/storage/emulated/0/Wikipedia/db/WikiData.sqlite" );
      //db.ExecuteSql("DROP TABLE Wiki_Data;");
+    
     //Create a table (if it does not exist already).  
     db.ExecuteSql( "CREATE TABLE IF NOT EXISTS Wiki_Data " +  
         "(id integer primary key AUTOINCREMENT, title text unique, url text, textContent text, lang text)" )  
-db.ExecuteSql("CREATE VIEW IF NOT EXISTS WikiSortx AS SELECT * FROM Wiki_Data Order By title ASC");
+db.ExecuteSql("CREATE VIEW IF NOT EXISTS WikiSort AS SELECT * FROM Wiki_Data Order By title ASC");
 }
 
 function Progress1(progress)
@@ -109,8 +117,8 @@ function ParseData1(results)
 	b = results[2];
 	d = results[3];
 	//app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
-	db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,'eng'], null, null );
-	app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d) );
+	db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,lng], null, null );
+	app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", utils.CompressString(d) );
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
 
 		//app.ScreenShot( "/storage/emulated/0/Download/sqlite/Wiki/"+a+".jpg", 70 );
@@ -138,9 +146,9 @@ function ParseData2(results)
 	//app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
 //	db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [a, e, b, d, 'ita'], null, null );
 //db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [compressString(a), e, compressString(b), compressString(d),'ita'], null, null );
-db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b, 'eng'], null, null );
+db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b, lng], null, null );
 	
-		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d) );
+		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", utils.CompressString(d) );
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
 
 	
@@ -161,11 +169,11 @@ function ParseData3(results)
 	b = results[2];
 	d = results[3];
 //	app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
-	//db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [a, e, b, d,'eng'], null, null );
-//db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [compressString(a), e, compressString(b), compressString(d),'eng'], null, null );
-db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent,  lang)  VALUES (?,?,?,?)", [a, e, b,'eng'], null, null );
+	//db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [a, e, b, d,lng], null, null );
+//db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [compressString(a), e, compressString(b), compressString(d),lng], null, null );
+db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent,  lang)  VALUES (?,?,?,?)", [a, e, b,lng], null, null );
 	
-		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d) );
+		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", utils.CompressString(d) );
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
 
 	
@@ -183,9 +191,9 @@ function ParseData4(results)
 	//app.ShowPopup( "Title: " + a + " , Text: " + b + ".\r\n The record was saved." );
 	//db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [a, e, b, d,'spa'], null, null );
 //db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, htmlContent, lang)  VALUES (?,?,?,?,?)", [compressString(a), e, compressString(b), compressString(d),'spa'], null, null );
-db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,'eng'], null, null );
+db.ExecuteSql( "INSERT INTO Wiki_Data(title, url, textContent, lang)  VALUES (?,?,?,?)", [a, e, b,lng], null, null );
 	
-		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", compressString(d));
+		app.WriteFile( "/storage/emulated/0/Wikipedia/html/"+a+".html", utils.CompressString(d));
 app.WriteFile( "/storage/emulated/0/Wikipedia/text/"+a+".txt", b );
 
 	
@@ -199,8 +207,10 @@ function GetWiki()
 {
 	app.HttpRequest( "GET", address1, null, null, handleReply1 );
 	app.HttpRequest( "GET", address2, null, null, handleReply2 );
-		app.HttpRequest( "GET", address3, null, null, handleReply3 );
+	app.HttpRequest( "GET", address3, null, null, handleReply3 );
 	app.HttpRequest( "GET", address4, null, null, handleReply4);
+	
+	setTimeout(GetWiki, 350);
 	//GetWiki();
 }
 
